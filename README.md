@@ -9,6 +9,7 @@ So to begin I'll describe what I'm trying to do. My backend server is Azure Medi
 1. Intercept the requests for the master playlist and return an edited version of it that references the subtitle playlists (multiple for multiple languages, or just one for one language)
 1. Select a subtitle to show (well documented on https://developer.apple.com/documentation/avfoundation/media_playback_and_selection/selecting_subtitles_and_alternative_audio_tracks ) 
 1. Intercept requests to the subtitle playlists that will come through (after you've selected a subtitle to show) and return playlists you've built on the fly that reference the WebVtt files on the server
+
 That's it. Not too much, except there are many complications that get in the way that I had to discover myself. I'll describe them each first briefly and then in greater detail.
 
 ### Brief complication explanations:
