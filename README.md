@@ -43,18 +43,20 @@ Lots of requests will come in, some need to be redirected, some need to be given
 
 ### HOW TO EDIT THE PLAYLISTS - master playlist
 The master playlist is easy to edit. The change is two things:
-1) each video resource has its own line and they all need to be told about the subtitle group (for each line that starts with "#EXT-X-STREAM-INF" I'm adding ",SUBTITLES=\"subs\"" on the end)
+1) each video resource has its own line and they all need to be told about the subtitle group (for each line that starts with `#EXT-X-STREAM-INF` I'm adding `,SUBTITLES="subs"` on the end)
 2) new lines need to be added for each subtitle language/type, all belonging to the subtitle group with their own URL (so for each type, add a line like "#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID=\"subs\",LANGUAGE=\"!!!yourLanguageHere!!!",NAME=\"!!!yourNameHere!!!",AUTOSELECT=YES,URI=\"!!!yourCustomUrlHere!!!\""
 The !!!yourCustomUrlHere!!! you use in step 2 will have to be detected by you when it's used for a request so you can return the manufactured subtitle playlist as part of the response, so set it to something unique. That Url will also have to use the "CUSTOMSCHEME" thing so that it comes to the delegate. You can also check out this streaming example to see how the manifest should look: https://developer.apple.com/streaming/examples/basic-stream-osx-ios5.html (sniff the network traffic with the browser debugger to see it).
 
 ### HOW TO EDIT THE PLAYLISTS - subtitle playlist
 The subtitle playlist is a little more complicated. You have to make the whole thing yourself. The way I've done it is to actually grab the WebVtt file myself inside the DataTask callback, then parse the thing down to find the end of the very last timestamp sequence, convert that to an integer number of seconds, and then insert that value in a couple places in a big string. Again, you can use the example listed above and sniff network traffic to see a real example for yourself. So it looks like this:
-	#EXTM3U
-	#EXT-X-TARGETDURATION:!!!thatLengthIMentioned!!!
-	#EXT-X-VERSION:3
-	#EXT-X-MEDIA-SEQUENCE:0
-	#EXT-X-PLAYLIST-TYPE:VOD
-	#EXTINF:!!!thatLengthIMentioned!!!
-	!!!absoluteUrlToTheWebVttFileOnTheServer!!!
-	#EXT-X-ENDLIST
+```
+#EXTM3U
+#EXT-X-TARGETDURATION:!!!thatLengthIMentioned!!!
+#EXT-X-VERSION:3
+#EXT-X-MEDIA-SEQUENCE:0
+#EXT-X-PLAYLIST-TYPE:VOD
+#EXTINF:!!!thatLengthIMentioned!!!
+!!!absoluteUrlToTheWebVttFileOnTheServer!!!
+#EXT-X-ENDLIST
+```
 Note that the playlist does NOT segment the vtt file as Apple recommends because this can't be done client-side (source: https://developer.apple.com/forums/thread/113063?answerId=623328022#623328022 ). Also note that I do NOT put a comma at the end of the "EXTINF" line even though Apple's example here says to do that, because it seems to break it: https://developer.apple.com/videos/play/wwdc2012/512/
