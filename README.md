@@ -13,7 +13,7 @@ So to begin I'll describe what I'm trying to do. My backend server is Azure Medi
 That's it. Not too much, except there are many complications that get in the way that I had to discover myself. I'll describe them each first briefly and then in greater detail.
 
 ### Brief complication explanations:
-1. Many requests will come be coming through, but you should only (and can only) handle a couple of them yourself, the others need to be allowed to pass through untouched. I will describe which ones need handling and which ones don't and how to handle them.
+1. Many requests will be coming through, but you should only (and can only) handle a couple of them yourself, the others need to be allowed to pass through untouched. I will describe which ones need handling and which ones don't and how to handle them.
 1. Apple decided a simple HTTP request was not good enough and decided to obscure things by translating it into a weird double-identity AVAssetResourceLoadingRequest thing that has a DataRequest property (AVAssetResourceLoadingDataRequest) and a ContentInformationRequest property (AVAssetResourceLoadingContentInformationRequest). I still don't understand why this was necessary or what benefit it brings, but what I've done here with them is working. Some promising blogs/resources seem to suggest you have to mess with the ContentInformationRequest but I find that you can simply ignore the ContentInformationRequest, and in fact messing with it more often than not just breaks things.
 1. Apple suggests you segment your VTT file into small pieces, but you simply can't do this client-side (Apple disallows this), but luckily it also seems you don't actually have to do it, it's merely a suggestion.
 
