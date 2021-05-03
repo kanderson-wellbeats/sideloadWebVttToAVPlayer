@@ -52,7 +52,7 @@ public class CustomResourceLoaderDelegate : AVAssetResourceLoaderDelegate
 			return true;
 		}
 
-		if (!requestString.EndsWith(".ism/manifest(format=m3u8-aapl)") || // lots of fragment requests will come through, we're just going to fix their URL so they can proceed normally (getting bits of video and audio)
+		if (!requestString.ToLower().EndsWith(".ism/manifest(format=m3u8-aapl)") || // lots of fragment requests will come through, we're just going to fix their URL so they can proceed normally (getting bits of video and audio)
 			(dataRequest != null && 
 			 dataRequest.RequestedOffset == 0 && // this catches the first (of 3) master playlist requests. the thing sending out these requests and handling the responses seems unable to be satisfied by our handling of this (just for the first request), so that first request is just let through. if you mess with request 1 the whole thing stops after sending request 2. although this means the first request doesn't get the same edited master playlist as the second or third, apparently that's fine.
 			 dataRequest.RequestedLength == 2 &&
