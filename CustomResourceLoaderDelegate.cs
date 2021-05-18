@@ -124,16 +124,16 @@ public class CustomResourceLoaderDelegate : AVAssetResourceLoaderDelegate
 		var firstColon = afterArrow.IndexOf(":");
 		var period = afterArrow.IndexOf(".");
 		var timeString = afterArrow.Substring(firstColon - 2, period /*(+ 2 - 2)*/);
-		var lastTime = TimeSpan.Parse(timeString);
+		var lastTime = (int)TimeSpan.Parse(timeString).TotalSeconds;
 
 		var resultLines = new List<string>
 		{
 			"#EXTM3U",
-			"#EXT-X-TARGETDURATION:" + lastTime.TotalSeconds,
+			"#EXT-X-TARGETDURATION:" + lastTime,
 			"#EXT-X-VERSION:3",
 			"#EXT-X-MEDIA-SEQUENCE:0",
 			"#EXT-X-PLAYLIST-TYPE:VOD",
-			"#EXTINF:" + lastTime.TotalSeconds,
+			"#EXTINF:" + lastTime,
 			subtitle.SubtitleDto.CloudFileURL,
 			"#EXT-X-ENDLIST"
 		};
